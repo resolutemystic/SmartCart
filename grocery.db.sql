@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS "GroceryList" (
 	"priority"	INTEGER NOT NULL,
 	"isChecked"	INTEGER NOT NULL DEFAULT 0 CHECK("isChecked" IN (0, 1)),
 	PRIMARY KEY("entryID"),
-	FOREIGN KEY("itemID") REFERENCES ""
+	FOREIGN KEY("itemID") REFERENCES "GroceryItems"("itemID")
 );
 CREATE TABLE IF NOT EXISTS "Priorities" (
 	"priorityID"	INTEGER NOT NULL,
