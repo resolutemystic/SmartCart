@@ -2,24 +2,32 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+
 
         public MainPage()
         {
             InitializeComponent();
+            listItems.ItemsSource = GroceryList.GetLatestList();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        public List<GroceryItem> List
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            get { return GroceryList.GetLatestList(); }
         }
+
+        private void listItems_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            GroceryItem item = listItems.SelectedItem as GroceryItem;
+            Database.AddToList(2, 3, 1, true);
+            UpdateList();
+        }
+
+        private void UpdateList()
+        {
+            Database.PullList();
+            listItems.ItemsSource = GroceryList.GetLatestList();
+        }
+
     }
 
 }

@@ -4,6 +4,8 @@ namespace SmartCart
 {
     public static class MauiProgram
     {
+        public static string appDir = FileSystem.AppDataDirectory;
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
