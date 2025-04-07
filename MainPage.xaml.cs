@@ -1,25 +1,43 @@
-﻿namespace SmartCart
+﻿using Microsoft.Maui.Controls;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace SmartCart
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
+            LoadGroceryItems(); // Load on startup
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnAddItemClicked(object sender, EventArgs e)
         {
-            count++;
+            string itemName = ItemNameEntry.Text?.Trim();
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+            if (string.IsNullOrEmpty(itemName))
+            {
+                StatusLabel.Text = "Please enter an item name.";
+                return;
+            }
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            await DatabaseService.AddItemAsync(itemName);
+
+            StatusLabel.Text = $"Item \"{itemName}\" saved to your list!";
+            ItemNameEntry.Text = string.Empty;
+
+            await LoadGroceryItems(); // Refresh list after adding
+        }
+
+        private async Task LoadGroceryItems()
+        {
+            List<GroceryItem> items = await DatabaseService.GetItemsAsync();
+            GroceryListView.ItemsSource = items;
         }
     }
-
 }
+
+
+
