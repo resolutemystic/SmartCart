@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartCart.MainPage"
+<<<<<<< HEAD
              x:Name="GroceryListPage"
              BindingContext="{x:Reference GroceryListPage}">
     <VerticalStackLayout>
@@ -31,4 +32,47 @@
         </ListView>
     </VerticalStackLayout>
 
+=======
+             Title="SmartCart">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="15">
+
+            <Label Text="SmartCart Grocery List"
+                   FontSize="28"
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="ItemNameEntry"
+                   Placeholder="Enter item name"
+                   FontSize="18" />
+
+            <Button Text="Add to List"
+                    Clicked="OnAddItemClicked"
+                    BackgroundColor="DarkGreen"
+                    TextColor="White"
+                    FontSize="18" />
+
+            <Label x:Name="StatusLabel"
+                   Text=""
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center" />
+
+            <CollectionView x:Name="GroceryListView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BackgroundColor="#EFEFEF" CornerRadius="10">
+                            <Label Text="{Binding Name}" FontSize="18" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+>>>>>>> 8b7d3ce (Initial commit of working SmartCart features)
 </ContentPage>
+
+
