@@ -19,10 +19,11 @@ namespace SmartCart
             while (reader.Read())
             {
                 GroceryItem item = new GroceryItem(
-                    reader.GetString(0),
-                    Convert.ToInt32(reader.GetValue(1)),
+                    Convert.ToInt32(reader.GetValue(0)),
+                    reader.GetString(1),
                     Convert.ToInt32(reader.GetValue(2)),
-                    Convert.ToBoolean(Convert.ToInt32(reader.GetValue(3)))
+                    Convert.ToInt32(reader.GetValue(3)),
+                    Convert.ToBoolean(Convert.ToInt32(reader.GetValue(4)))
                     );
                 list.Add(item);
             }

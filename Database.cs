@@ -132,7 +132,7 @@ namespace SmartCart
             var cmd = connection.CreateCommand();
             connection.Open();
             cmd.CommandText = @"
-                                SELECT name, quantity, priority, isChecked
+                                SELECT GroceryList.itemID, name, quantity, priority, isChecked
                                 FROM GroceryList
                                 INNER JOIN GroceryItems on GroceryList.itemID = GroceryItems.itemID
                                ";

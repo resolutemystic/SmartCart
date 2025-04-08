@@ -8,12 +8,14 @@ namespace SmartCart
 {
     public class GroceryItem
     {
+        int itemID;
         string name;
         int quantity;
         string priority;
         bool isChecked;
-        public GroceryItem(string name, int quantity, int priority, bool isChecked)
+        public GroceryItem(int itemID, string name, int quantity, int priority, bool isChecked)
         {
+            this.itemID = itemID;
             this.name = name;
             this.quantity = quantity;
 
@@ -32,6 +34,7 @@ namespace SmartCart
 
             this.isChecked = isChecked;
         }
+        public int ItemID { get => itemID; set => itemID = value; }
         public string Name { get => name; set => name = value; }
         public int Quantity { get => quantity; set => quantity = value; }
         public string Priority { get => priority; set => priority = value; }
