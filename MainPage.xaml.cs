@@ -21,8 +21,7 @@
 
         private void NewItemBtnClicked(object sender, EventArgs e)
         {
-            Database.AddToList(2, 3, 1, true);
-            UpdateList();
+            Shell.Current.GoToAsync(nameof(AddItem));
         }
 
         void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
