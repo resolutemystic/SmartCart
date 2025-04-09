@@ -17,9 +17,17 @@
 
         private void listItems_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            GroceryItem item = listItems.SelectedItem as GroceryItem;
+        }
+
+        private void NewItemBtnClicked(object sender, EventArgs e)
+        {
             Database.AddToList(2, 3, 1, true);
             UpdateList();
+        }
+
+        void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            // Perform required operation after examining e.Value
         }
 
         private void UpdateList()

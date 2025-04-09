@@ -22,14 +22,13 @@
                             <Label Text="{Binding Name}" Grid.Column="0"/>
                             <Label Text="{Binding Quantity}" Grid.Column="1"/>
                             <Label Text="{Binding Priority}" Grid.Column="2"/>
-                            <CheckBox IsChecked="{Binding IsChecked}" Tag="{Binding ItemID}" Grid.Column="3"/>
+                            <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="OnCheckBoxCheckedChanged"/>
                         </Grid>
                     </ViewCell>
-                    
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Text="New Item" WidthRequest="120"/>
+        <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
     </VerticalStackLayout>
 
 </ContentPage>
