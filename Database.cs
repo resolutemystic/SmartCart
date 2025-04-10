@@ -132,7 +132,7 @@ namespace SmartCart
             var cmd = connection.CreateCommand();
             connection.Open();
             cmd.CommandText = @"
-                                SELECT GroceryList.itemID, name, quantity, priority, isChecked
+                                SELECT entryID, name, quantity, priority, isChecked
                                 FROM GroceryList
                                 INNER JOIN GroceryItems on GroceryList.itemID = GroceryItems.itemID
                                ";
@@ -151,11 +151,60 @@ namespace SmartCart
                                 INSERT INTO GroceryList (itemID, quantity, priority, isChecked)
                                 VALUES ({itemID}, {quantity}, {priority}, {isChecked});
                                 COMMIT;
-                               ";
+                                ";
             cmd.ExecuteNonQuery();
             connection.Close();
             cmd.Dispose();
 
+        }
+
+        public static void UpdateCheck(int entryID)
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = $@"
+                                BEGIN TRANSACTION;
+                                UPDATE GroceryList
+	                               SET isChecked = CASE isChecked
+		                               WHEN 0 THEN 1
+		                               WHEN 1 THEN 0
+		                               END
+	                               WHERE entryID = {entryID};
+                                COMMIT;
+                                ";
+            cmd.ExecuteNonQuery();
+            connection.Close();
+            cmd.Dispose();
+        }
+
+        public static bool GetCheckState(int entryID)
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = $@"
+                                SELECT isChecked FROM GroceryList WHERE entryID ={entryID}
+                                ";
+            bool state = Convert.ToBoolean(Convert.ToInt32(cmd.ExecuteScalar()));
+            connection.Close();
+            cmd.Dispose();
+            return state;
+        }
+
+        public static void DeleteEntry(int entryID)
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = $@"
+                                BEGIN TRANSACTION;
+                                DELETE FROM GroceryList WHERE entryID = {entryID};
+                                COMMIT;
+                                ";
+            cmd.ExecuteNonQuery();
+            connection.Close();
+            cmd.Dispose();
         }
 
     }

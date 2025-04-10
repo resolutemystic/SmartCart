@@ -1,13 +1,15 @@
-﻿namespace SmartCart
+﻿using System.Windows.Input;
+
+namespace SmartCart
 {
     public partial class MainPage : ContentPage
     {
-
+        bool isLoading = false;
 
         public MainPage()
         {
             InitializeComponent();
-            listItems.ItemsSource = GroceryList.GetLatestList();
+            UpdateList();
         }
 
         public List<GroceryItem> List
@@ -24,17 +26,31 @@
             Shell.Current.GoToAsync(nameof(AddItem));
         }
 
-        void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            // Perform required operation after examining e.Value
-        }
-
         private void UpdateList()
         {
+            isLoading = true;
             Database.PullList();
             listItems.ItemsSource = GroceryList.GetLatestList();
+            isLoading = false;
         }
 
+        private void CheckBox_CheckedChanged(System.Object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
+        {
+            var checkbox = (CheckBox)sender;
+            var item = (GroceryItem)checkbox.BindingContext;
+            bool currentState;
+            if(item != null)
+            {
+                currentState = Database.GetCheckState(item.EntryID);
+
+                if(!isLoading && currentState != item.IsChecked)
+                {
+                    Database.UpdateCheck(item.EntryID);
+                }
+            }
+
+
+        }
     }
 
 }
