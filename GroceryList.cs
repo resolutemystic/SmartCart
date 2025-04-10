@@ -39,5 +39,10 @@ namespace SmartCart
         {
             currentList = newList;
         }
+
+        internal static void AddItem(GroceryItem newItem)
+        {
+            currentList.Add(newItem);
+        }
     }
 }

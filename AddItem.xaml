@@ -2,11 +2,47 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartCart.AddItem"
-             Title="AddItem">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Add Grocery Item">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Label Text="Item Name" />
+            <Entry x:Name="ItemNameEntry" Placeholder="e.g. Milk" />
+
+            <Label Text="Quantity" />
+            <Entry x:Name="QuantityEntry" Keyboard="Numeric" Placeholder="e.g. 1" />
+
+            <Label Text="Priority" />
+            <Picker x:Name="PriorityPicker" Title="Select Priority">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Low</x:String>
+                        <x:String>Medium</x:String>
+                        <x:String>High</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Label Text="Category" />
+            <Picker x:Name="CategoryPicker" Title="Select Category">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Produce</x:String>
+                        <x:String>Dairy</x:String>
+                        <x:String>Snacks</x:String>
+                        <x:String>Frozen</x:String>
+                        <x:String>Beverages</x:String>
+                        <x:String>Deli</x:String>
+                        <x:String>Canned / Dried Foods</x:String>
+                        <x:String>Baked Goods</x:String>
+                        <x:String>Other</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Button Text="Add Item" Clicked="OnAddItemClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

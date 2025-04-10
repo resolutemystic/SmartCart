@@ -11,9 +11,14 @@ namespace SmartCart
         int itemID;
         string name;
         int quantity;
-        string priority;
+        string priority = string.Empty; 
         bool isChecked;
-        public GroceryItem(int itemID, string name, int quantity, int priority, bool isChecked)
+
+        public GroceryItem(int itemID,
+                           string name,
+                           int quantity,
+                           int priority,
+                           bool isChecked)
         {
             this.itemID = itemID;
             this.name = name;
@@ -30,14 +35,20 @@ namespace SmartCart
                 case 3:
                     this.priority = "High";
                     break;
+                default:
+                    this.priority = "Unknown"; 
+                    break;
             }
 
             this.isChecked = isChecked;
         }
+
         public int ItemID { get => itemID; set => itemID = value; }
         public string Name { get => name; set => name = value; }
         public int Quantity { get => quantity; set => quantity = value; }
         public string Priority { get => priority; set => priority = value; }
         public bool IsChecked { get => isChecked; set => isChecked = value; }
+
+      
     }
 }

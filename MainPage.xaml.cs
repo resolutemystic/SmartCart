@@ -34,6 +34,15 @@
             Database.PullList();
             listItems.ItemsSource = GroceryList.GetLatestList();
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Reload list from GroceryList
+            listItems.ItemsSource = null;
+            listItems.ItemsSource = GroceryList.GetLatestList();
+        }
+
 
     }
 
