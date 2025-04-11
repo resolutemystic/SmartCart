@@ -21,7 +21,7 @@
             <Label Text="#" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
             <Label Text="   !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
         </Grid>
-        <ListView x:Name="listItems" ItemTapped="listItems_ItemTapped">
+        <ListView x:Name="listItems">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

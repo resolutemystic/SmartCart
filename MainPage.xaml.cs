@@ -13,13 +13,14 @@ namespace SmartCart
             UpdateList();
         }
 
+        protected override void OnAppearing()
+        {
+            UpdateList();
+        }
+
         public List<GroceryItem> List
         {
             get { return GroceryList.GetLatestList(); }
-        }
-
-        private void listItems_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
         }
 
         private void NewItemBtnClicked(object sender, EventArgs e)
@@ -27,7 +28,7 @@ namespace SmartCart
             Shell.Current.GoToAsync(nameof(AddItem));
         }
 
-        private void UpdateList()
+        public void UpdateList()
         {
             isLoading = true;
             Database.PullList();
@@ -49,8 +50,6 @@ namespace SmartCart
                     Database.UpdateCheck(item.EntryID);
                 }
             }
-
-
         }
 
         private void DeleteButton_Clicked(object sender, EventArgs e)

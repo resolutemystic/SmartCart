@@ -14,6 +14,11 @@ namespace SmartCart
         static string dbPath = FileSystem.AppDataDirectory + "\\grocery.db";
         static string connectionString = $"Data Source={dbPath}";
 
+        public static Dictionary<string, int> categoryDict = new Dictionary<string, int>();
+        public static Dictionary<string, int> groceryItemDict = new Dictionary<string, int>();
+        public static Dictionary<string, int> priorityDict = new Dictionary<string, int>();
+
+
         static Database()
         {
 
@@ -123,7 +128,9 @@ namespace SmartCart
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }
-
+            BuildCategories();
+            BuildGroceryItems();
+            BuildPriorities();
         }
 
         public static void PullList()
@@ -149,7 +156,7 @@ namespace SmartCart
             cmd.CommandText = $@"
                                 BEGIN TRANSACTION;
                                 INSERT INTO GroceryList (itemID, quantity, priority, isChecked)
-                                VALUES ({itemID}, {quantity}, {priority}, {isChecked});
+                                VALUES ({itemID}, {quantity}, {priority}, {Convert.ToInt32(isChecked)});
                                 COMMIT;
                                 ";
             cmd.ExecuteNonQuery();
@@ -203,6 +210,51 @@ namespace SmartCart
                                 COMMIT;
                                 ";
             cmd.ExecuteNonQuery();
+            connection.Close();
+            cmd.Dispose();
+        }
+
+        private static void BuildCategories()
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT categoryID, name FROM Categories";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                categoryDict.Add(reader.GetString(1), Convert.ToInt32(reader.GetValue(0)));
+            }
+            connection.Close();
+            cmd.Dispose();
+        }
+
+        private static void BuildPriorities()
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT priorityID, name FROM Priorities";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                priorityDict.Add(reader.GetString(1), Convert.ToInt32(reader.GetValue(0)));
+            }
+            connection.Close();
+            cmd.Dispose();
+        }
+
+        private static void BuildGroceryItems()
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            connection.Open();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT itemID, name FROM GroceryItems";
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                groceryItemDict.Add(reader.GetString(1), Convert.ToInt32(reader.GetValue(0)));
+            }
             connection.Close();
             cmd.Dispose();
         }
