@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Maui.Views;
+using System.Windows.Input;
 
 namespace SmartCart
 {
@@ -50,6 +51,28 @@ namespace SmartCart
             }
 
 
+        }
+
+        private void DeleteButton_Clicked(object sender, EventArgs e)
+        {
+            var delete = (Button)sender;
+            var item = (GroceryItem)delete.BindingContext;
+
+            if (item != null)
+            {
+                Database.DeleteEntry(item.EntryID);
+                var confirmPopup = new MessagePopUp(
+                    "Item has been deleted from the list"
+                );
+
+                this.ShowPopup(confirmPopup);
+                UpdateList();
+            } 
+            else
+            {
+                var errorPopup = new MessagePopUp("An error occurred while deleting the item.");
+                this.ShowPopup(errorPopup);
+            }
         }
     }
 
