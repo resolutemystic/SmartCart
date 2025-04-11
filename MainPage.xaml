@@ -15,11 +15,11 @@
                 <ColumnDefinition Width="30" />
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
             <Label Text="Name" Grid.Column="0" FontAttributes="Bold" FontSize="16"/>
             <Label Text="#" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
             <Label Text="   !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
-
         </Grid>
         <ListView x:Name="listItems" ItemTapped="listItems_ItemTapped">
             <ListView.ItemTemplate>
@@ -39,6 +39,7 @@
                             <Label Text="{Binding Quantity}" Grid.Column="1" VerticalOptions="Center"/>
                             <Label Text="{Binding Priority}" Grid.Column="2" VerticalOptions="Center"/>
                             <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="CheckBox_CheckedChanged"/>
+                            <Button Text="Delete Item" Grid.Column="4" Clicked="DeleteButton_Clicked" WidthRequest="100" HeightRequest="30" BackgroundColor="Red" TextColor="White" FontSize="12" CornerRadius="5" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
