@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace SmartCart;
@@ -8,6 +9,7 @@ public partial class AddItem : ContentPage
 	public AddItem()
 	{
 		InitializeComponent();
+
         PriorityPicker.ItemsSource = Priorities;
         ItemNamePicker.ItemsSource = Items;
 	}
@@ -33,7 +35,7 @@ public partial class AddItem : ContentPage
 
     public List<string> Items
     {
-        get { return new List<string>(Database.groceryItemDict.Keys); }
+        get { return new List<string>(Database.categorizedItemDict.Keys); }
     }
 
     public List<string> Priorities
