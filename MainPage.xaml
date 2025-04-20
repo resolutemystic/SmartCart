@@ -46,7 +46,23 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
+        <HorizontalStackLayout 
+            Spacing="20"
+            HorizontalOptions="Center"
+            Padding="10"
+        >
+            <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
+            <Button 
+                x:Name="DeleteSelectedButton"
+                Text="Delete Selected" 
+                WidthRequest="150" 
+                Clicked="DeleteSelected_Clicked"
+                IsVisible="False"
+                BackgroundColor="Red"
+                TextColor="White"
+            />
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 
 </ContentPage>
