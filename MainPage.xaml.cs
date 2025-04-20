@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SmartCart
@@ -49,6 +50,29 @@ namespace SmartCart
                 {
                     Database.UpdateCheck(item.EntryID);
                 }
+            }
+
+            UpdateDeleteSelectedButtonVisibility();
+        }
+
+        private void UpdateDeleteSelectedButtonVisibility()
+        {
+            var list = GroceryList.GetLatestList();
+            bool hasChecked = list.Any(i => i.IsChecked);
+            DeleteSelectedButton.IsVisible = hasChecked;
+        }
+
+        private async void DeleteSelected_Clicked(object sender, EventArgs e)
+        {
+            bool answer = await DisplayAlert("Confirm Deletion", "Would you like to delete all selected items from the list?", "Yes", "No");
+            if (answer)
+            {
+                Database.DeleteCheckedItems();
+                UpdateList(); 
+                DeleteSelectedButton.IsVisible = false;
+            } else
+            {
+                return;
             }
         }
 

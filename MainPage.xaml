@@ -40,13 +40,29 @@
                             <Label Text="{Binding Quantity}" Grid.Column="1" VerticalOptions="Center"/>
                             <Label Text="{Binding Priority}" Grid.Column="2" VerticalOptions="Center"/>
                             <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="CheckBox_CheckedChanged"/>
-                            <ImageButton Source="trash.png" Grid.Column="4" Clicked="DeleteButton_Clicked" Aspect="Center"/>
+                            <ImageButton Source="trash.png" Grid.Column="4" Clicked="DeleteButton_Clicked" Aspect="Center" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
+        <HorizontalStackLayout 
+            Spacing="20"
+            HorizontalOptions="Center"
+            Padding="10"
+        >
+            <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
+            <Button 
+                x:Name="DeleteSelectedButton"
+                Text="Delete Selected" 
+                WidthRequest="150" 
+                Clicked="DeleteSelected_Clicked"
+                IsVisible="False"
+                BackgroundColor="Red"
+                TextColor="White"
+            />
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 
 </ContentPage>
