@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartCart.CategorySelectionPage"
+             Title="Select Category">
+
+    <VerticalStackLayout Padding="20" Spacing="16">
+        <Label Text="Select a Category" FontSize="18" />
+
+        <Picker x:Name="CategoryPicker"
+                Title="Choose a category"
+                ItemsSource="{Binding CategoryList}"
+                SelectedIndexChanged="OnCategoryChanged" />
+
+        <Label Text="After selecting, you’ll be redirected to the item picker." 
+               FontSize="12" 
+               TextColor="Gray"
+               HorizontalOptions="Center" />
+        <Button 
+            Text="Browse All Items"
+            Clicked="OnBrowseAllItemsClicked"
+            WidthRequest="180"
+            BackgroundColor="SlateBlue"
+            TextColor="White"
+            CornerRadius="10"
+            Padding="10" />
+    </VerticalStackLayout>
+</ContentPage>

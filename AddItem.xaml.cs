@@ -43,7 +43,7 @@ public partial class AddItem : ContentPage
         get { return new List<string>(Database.priorityDict.Keys); }
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    private async void Button_Clicked(object sender, EventArgs e)
     {
         string name;
         string priority;
@@ -69,7 +69,18 @@ public partial class AddItem : ContentPage
             quantity = Convert.ToInt32(QuantityEntry.Text);
         }
 
+
         Database.AddToList(itemID, quantity, priorityID, false);
-        Navigation.PopAsync();
+
+        await Shell.Current.GoToAsync("///MainPage");
+
+
     }
+    private async void OnSelectFromCategoryClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(CategorySelectionPage));
+    }
+   
+    
 }
+

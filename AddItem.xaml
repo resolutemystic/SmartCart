@@ -16,7 +16,23 @@
             <Label Text="Priority" />
             <Picker x:Name="PriorityPicker" Title="Select Priority"/>
 
-            <Button Text="Add Item" Clicked="Button_Clicked"/>
+            <HorizontalStackLayout 
+             HorizontalOptions="Center"
+                Spacing="20"
+            Margin="0,20,0,20">
+
+             
+
+                <Button  
+            Text="Add Item" 
+            Clicked="Button_Clicked"
+            WidthRequest="150"
+            BackgroundColor="MediumSlateBlue"
+            TextColor="White"
+            CornerRadius="10"
+            Padding="12,6"/>
+
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>
