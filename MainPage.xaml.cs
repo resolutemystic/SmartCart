@@ -26,7 +26,7 @@ namespace SmartCart
 
         private void NewItemBtnClicked(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync(nameof(AddItem));
+            Shell.Current.GoToAsync(nameof(CategorySelectionPage));
         }
 
         public void UpdateList()

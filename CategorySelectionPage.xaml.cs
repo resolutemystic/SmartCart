@@ -36,4 +36,11 @@ namespace SmartCart;
             Shell.Current.GoToAsync(nameof(AddItem));
         }
     }
+
+    private async void OnBrowseAllItemsClicked(object sender, EventArgs e)
+    {
+        Database.UpdateCategorizedItems(0); // resets to unfiltered
+        await Shell.Current.GoToAsync(nameof(AddItem));
+    }
+
 }

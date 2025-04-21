@@ -21,14 +21,7 @@
                 Spacing="20"
             Margin="0,20,0,20">
 
-                <Button 
-                Text="Select from Category"
-            Clicked="OnSelectFromCategoryClicked"
-            WidthRequest="180"
-            BackgroundColor="MediumSlateBlue"
-            TextColor="White"
-            CornerRadius="10"
-            Padding="12,6"/>
+             
 
                 <Button  
             Text="Add Item" 

@@ -16,5 +16,13 @@
                FontSize="12" 
                TextColor="Gray"
                HorizontalOptions="Center" />
+        <Button 
+            Text="Browse All Items"
+            Clicked="OnBrowseAllItemsClicked"
+            WidthRequest="180"
+            BackgroundColor="SlateBlue"
+            TextColor="White"
+            CornerRadius="10"
+            Padding="10" />
     </VerticalStackLayout>
 </ContentPage>
