@@ -39,5 +39,7 @@ namespace SmartCart
         public int Quantity { get => quantity; set => quantity = value; }
         public string Priority { get => priority; set => priority = value; }
         public bool IsChecked { get => isChecked; set => isChecked = value; }
+        public List<int> QuantityOptions { get => Enumerable.Range(1, 99).ToList<int>(); }
+        public List<string> PriorityOptions { get => new List<string> { "Low", "Medium", "High" }; }
     }
 }

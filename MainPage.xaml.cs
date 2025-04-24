@@ -87,6 +87,46 @@ namespace SmartCart
                 UpdateList();
             }
         }
+
+        private async void QuantityPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var picker = (Picker)sender;
+            var item = (GroceryItem)picker.BindingContext;
+
+            if(item != null && (int)picker.SelectedItem != item.Quantity)
+            {
+                bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
+                if (yes)
+                {
+                    Database.UpdateQuantity(item.EntryID, (int)picker.SelectedItem);
+                    item.Quantity = (int)picker.SelectedItem;
+                }
+                else
+                {
+                    picker.SelectedItem = item.Quantity;
+                }
+            }
+        }
+
+        private async void PriorityPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var picker = (Picker)sender;
+            var item = (GroceryItem)picker.BindingContext;
+
+            if (item != null && (string)picker.SelectedItem != item.Priority)
+            {
+                bool yes = await DisplayAlert("Are you sure?", $"Change the priority of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
+                if (yes)
+                {
+                    Database.UpdatePriority(item.EntryID, Database.priorityDict[(string)picker.SelectedItem]);
+                    item.Priority = (string)picker.SelectedItem;
+                }
+                else
+                {
+                    picker.SelectedItem = item.Priority;
+                }
+            }
+        }
     }
 
 }

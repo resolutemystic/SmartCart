@@ -12,14 +12,14 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="30" />
-                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="45" />
             </Grid.ColumnDefinitions>
             <Label Text="Name" Grid.Column="0" FontAttributes="Bold" FontSize="16"/>
-            <Label Text="#" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
-            <Label Text="   !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
+            <Label Text="  #" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
+            <Label Text="    !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
         </Grid>
         <ListView x:Name="listItems">
             <ListView.ItemTemplate>
@@ -31,14 +31,14 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="30" />
-                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="80" />
                                 <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="45" />
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Name}" Grid.Column="0" VerticalOptions="Center"/>
-                            <Label Text="{Binding Quantity}" Grid.Column="1" VerticalOptions="Center"/>
-                            <Label Text="{Binding Priority}" Grid.Column="2" VerticalOptions="Center"/>
+                            <Picker ItemsSource="{Binding QuantityOptions}" SelectedItem="{Binding Quantity, Mode=OneWay}" SelectedIndexChanged="QuantityPicker_SelectedIndexChanged" Grid.Column="1" VerticalOptions="Center"/>
+                            <Picker ItemsSource="{Binding PriorityOptions}" SelectedItem="{Binding Priority, Mode=OneWay}" SelectedIndexChanged="PriorityPicker_SelectedIndexChanged" Grid.Column="2" VerticalOptions="Center"/>
                             <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="CheckBox_CheckedChanged"/>
                             <ImageButton Source="trash.png" Grid.Column="4" Clicked="DeleteButton_Clicked" Aspect="Center"/>
                         </Grid>
