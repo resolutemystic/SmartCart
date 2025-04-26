@@ -318,6 +318,23 @@ namespace SmartCart
             cmd.Dispose();
         }
 
+        public static void IncreaseQuantity(int entryID, int quantity)
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = $@"
+                                BEGIN TRANSACTION;
+                                UPDATE GroceryList 
+                                SET quantity = quantity + {quantity}
+                                WHERE entryID = {entryID};
+                                COMMIT;
+                                ";
+            cmd.ExecuteNonQuery();
+            connection.Close();
+            cmd.Dispose();
+        }
+
         public static void UpdatePriority(int entryID, int priority)
         {
             SqliteConnection connection = new SqliteConnection(connectionString);
@@ -333,6 +350,28 @@ namespace SmartCart
             cmd.ExecuteNonQuery();
             connection.Close();
             cmd.Dispose();
+        }
+
+        public static int ExistingListItem(int itemID)
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = $@"
+                                SELECT entryID FROM GroceryList
+                                WHERE itemID = {itemID}
+                                ";
+            var result = cmd.ExecuteScalar();
+
+            int entryID = 0;
+            if (result != null)
+            {
+                entryID = Convert.ToInt32(result);
+            }
+            connection.Close();
+            cmd.Dispose();
+
+            return entryID;
         }
 
     }

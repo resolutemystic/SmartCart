@@ -45,32 +45,39 @@ public partial class AddItem : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        string name;
-        string priority;
-        int quantity;
+        string name = (string)ItemNamePicker.SelectedItem;
+        string priority = (string)PriorityPicker.SelectedItem;
 
         int itemID = 1;
         if(ItemNamePicker.SelectedItem != null)
         {
-            name = (string)ItemNamePicker.SelectedItem;
             itemID = Database.groceryItemDict[name];
         }
 
         int priorityID = 1;
         if(PriorityPicker.SelectedItem != null)
         {
-            priority = (string)PriorityPicker.SelectedItem;
             priorityID = Database.priorityDict[priority];
         }
 
-        quantity = 1;
+        int quantity = 1;
         if(QuantityEntry.Text != null)
         {
             quantity = Convert.ToInt32(QuantityEntry.Text);
         }
 
-
-        Database.AddToList(itemID, quantity, priorityID, false);
+        int existing = Database.ExistingListItem(itemID);
+        if (existing > 0)
+        {
+            if (await DisplayAlert("Already Exists", $"{name} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
+            {
+                Database.IncreaseQuantity(existing, quantity);
+            }
+        }
+        else
+        {
+            Database.AddToList(itemID, quantity, priorityID, false);
+        }
 
         await Shell.Current.GoToAsync("///MainPage");
 
