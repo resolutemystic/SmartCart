@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Linq; // <-- Needed for .Any()
 
 namespace SmartCart
 {
@@ -47,7 +48,7 @@ namespace SmartCart
             {
                 currentState = Database.GetCheckState(item.EntryID);
 
-                if(!isLoading && currentState != item.IsChecked)
+                if (!isLoading && currentState != item.IsChecked)
                 {
                     Database.UpdateCheck(item.EntryID);
                 }
@@ -69,65 +70,30 @@ namespace SmartCart
             if (answer)
             {
                 Database.DeleteCheckedItems();
-                UpdateList(); 
+                UpdateList();
                 DeleteSelectedButton.IsVisible = false;
-            } else
-            {
-                return;
             }
         }
 
-        private void DeleteButton_Clicked(object sender, EventArgs e)
+        private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
             var delete = (ImageButton)sender;
             var item = (GroceryItem)delete.BindingContext;
 
             if (item != null)
             {
-                Database.DeleteEntry(item.EntryID);
-                UpdateList();
-            }
-        }
+                bool answer = await DisplayAlert(
+                    "Confirm Deletion",
+                    $"Are you sure you want to delete {item.Name} from your list?",
+                    "Yes",
+                    "No");
 
-        private async void QuantityPicker_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var picker = (Picker)sender;
-            var item = (GroceryItem)picker.BindingContext;
-
-            if(item != null && (int)picker.SelectedItem != item.Quantity)
-            {
-                bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
-                if (yes)
+                if (answer)
                 {
-                    Database.UpdateQuantity(item.EntryID, (int)picker.SelectedItem);
-                    item.Quantity = (int)picker.SelectedItem;
-                }
-                else
-                {
-                    picker.SelectedItem = item.Quantity;
-                }
-            }
-        }
-
-        private async void PriorityPicker_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var picker = (Picker)sender;
-            var item = (GroceryItem)picker.BindingContext;
-
-            if (item != null && (string)picker.SelectedItem != item.Priority)
-            {
-                bool yes = await DisplayAlert("Are you sure?", $"Change the priority of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
-                if (yes)
-                {
-                    Database.UpdatePriority(item.EntryID, Database.priorityDict[(string)picker.SelectedItem]);
-                    item.Priority = (string)picker.SelectedItem;
-                }
-                else
-                {
-                    picker.SelectedItem = item.Priority;
+                    Database.DeleteEntry(item.EntryID);
+                    UpdateList();
                 }
             }
         }
     }
-
 }
