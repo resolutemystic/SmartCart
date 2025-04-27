@@ -42,7 +42,8 @@ namespace SmartCart
             var checkbox = (CheckBox)sender;
             var item = (GroceryItem)checkbox.BindingContext;
             bool currentState;
-            if(item != null)
+
+            if (item != null)
             {
                 currentState = Database.GetCheckState(item.EntryID);
 
