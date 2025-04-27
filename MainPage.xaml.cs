@@ -93,6 +93,11 @@ namespace SmartCart
                     Database.DeleteEntry(item.EntryID);
                     UpdateList();
                 }
+                else
+                {
+                    // User cancelled, do nothing
+                    return;
+                }
             }
         }
     }
