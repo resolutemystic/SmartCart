@@ -76,12 +76,14 @@ namespace SmartCart
             }
         }
 
-        private void DeleteButton_Clicked(object sender, EventArgs e)
+        private async void DeleteButton_Clicked(object sender, EventArgs e)
         {
             var delete = (ImageButton)sender;
             var item = (GroceryItem)delete.BindingContext;
 
-            if (item != null)
+            bool yes = await DisplayAlert("Are you sure?", $"Delete {item.Name} from your current list?", "Yes", "Cancel");
+
+            if (item != null && yes)
             {
                 Database.DeleteEntry(item.EntryID);
                 UpdateList();
