@@ -5,7 +5,7 @@
         public App()
         {
             InitializeComponent();
-
+            Database.PullList();
             MainPage = new AppShell();
         }
     }
