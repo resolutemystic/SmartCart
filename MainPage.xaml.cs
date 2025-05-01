@@ -116,6 +116,7 @@ namespace SmartCart
             var item = (GroceryItem)picker.BindingContext;
 
             if (item != null && (string)picker.SelectedItem != item.Priority)
+
             {
                 bool yes = await DisplayAlert("Are you sure?", $"Change the priority of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
                 if (yes)
