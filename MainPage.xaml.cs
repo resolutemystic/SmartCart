@@ -80,7 +80,9 @@ namespace SmartCart
             var delete = (ImageButton)sender;
             var item = (GroceryItem)delete.BindingContext;
 
-            if (item != null)
+            bool yes = await DisplayAlert("Are you sure?", $"Delete {item.Name} from your current list?", "Yes", "Cancel");
+
+            if (item != null && yes)
             {
                 bool answer = await DisplayAlert(
                     "Confirm Deletion",
