@@ -5,17 +5,35 @@
              Title="Select Category">
 
     <VerticalStackLayout Padding="20" Spacing="16">
-        <Label Text="Select a Category" FontSize="18" />
+        <Label Text="Select a Category" FontSize="18" HorizontalOptions="Center" />
 
-        <Picker x:Name="CategoryPicker"
-                Title="Choose a category"
-                ItemsSource="{Binding CategoryList}"
-                SelectedIndexChanged="OnCategoryChanged" />
+        <CollectionView x:Name="CategoryCollection"
+                        ItemsSource="{Binding CategoryList}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5"
+                           BorderColor="Gray"
+                           CornerRadius="10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Tapped="CategoryFrame_Tapped"
+                                CommandParameter="{Binding}" />
+                        </Frame.GestureRecognizers>
+                        <Label Text="{Binding}" 
+                               FontSize="16"
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        <Label Text="After selecting, you’ll be redirected to the item picker." 
+        <Label Text="Or browse the full list:" 
                FontSize="12" 
                TextColor="Gray"
                HorizontalOptions="Center" />
+
         <Button 
             Text="Browse All Items"
             Clicked="OnBrowseAllItemsClicked"
