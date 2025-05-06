@@ -23,8 +23,8 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="Gray" Padding="10" Margin="5">
-                            <Label Text="{Binding ItemName}" FontSize="16" />
+                        <Frame BorderColor="Gray" Padding="10" Margin="5" BackgroundColor="White">
+                            <Label Text="{Binding ItemName}" FontSize="16" TextColor="Black" />
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
