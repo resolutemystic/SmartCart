@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
-             x:Class="SmartCart.MainPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Name="GroceryListPage"
-             BindingContext="{x:Reference GroceryListPage}">
+    x:Class="SmartCart.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="GroceryListPage"
+    BindingContext="{x:Reference GroceryListPage}">
+
     <VerticalStackLayout>
         <Grid Padding="10">
             <Grid.RowDefinitions>
@@ -21,6 +22,7 @@
             <Label Text="  #" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
             <Label Text="    !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
         </Grid>
+
         <ListView x:Name="listItems">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -37,21 +39,41 @@
                                 <ColumnDefinition Width="45" />
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Name}" Grid.Column="0" VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding QuantityOptions}" SelectedItem="{Binding Quantity, Mode=OneWay}" SelectedIndexChanged="QuantityPicker_SelectedIndexChanged" Grid.Column="1" VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding PriorityOptions}" SelectedItem="{Binding Priority, Mode=OneWay}" SelectedIndexChanged="PriorityPicker_SelectedIndexChanged" Grid.Column="2" VerticalOptions="Center"/>
-                            <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="CheckBox_CheckedChanged"/>
-                            <ImageButton Source="trash.png" Grid.Column="4" Clicked="DeleteButton_Clicked" Aspect="Center"/>
+                            <Picker 
+                                ItemsSource="{Binding QuantityOptions}" 
+                                SelectedItem="{Binding Quantity, Mode=OneWay}" 
+                                SelectedIndexChanged="QuantityPicker_SelectedIndexChanged" 
+                                Grid.Column="1" 
+                                VerticalOptions="Center"/>
+                            <Picker 
+                                ItemsSource="{Binding PriorityOptions}" 
+                                SelectedItem="{Binding Priority, Mode=OneWay}" 
+                                SelectedIndexChanged="PriorityPicker_SelectedIndexChanged" 
+                                Grid.Column="2" 
+                                VerticalOptions="Center"/>
+                            <CheckBox 
+                                IsChecked="{Binding IsChecked}" 
+                                Grid.Column="3" 
+                                CheckedChanged="CheckBox_CheckedChanged"/>
+                            <ImageButton 
+                                Source="trash.png" 
+                                Grid.Column="4" 
+                                Clicked="DeleteButton_Clicked" 
+                                Aspect="Center"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
         <HorizontalStackLayout 
             Spacing="20"
             HorizontalOptions="Center"
-            Padding="10"
-        >
-            <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
+            Padding="10">
+            <Button 
+                Text="New Item" 
+                WidthRequest="120" 
+                Clicked="NewItemBtnClicked"/>
             <Button 
                 x:Name="DeleteSelectedButton"
                 Text="Delete Selected" 
@@ -59,10 +81,20 @@
                 Clicked="DeleteSelected_Clicked"
                 IsVisible="False"
                 BackgroundColor="Red"
-                TextColor="White"
-            />
+                TextColor="White"/>
         </HorizontalStackLayout>
 
+        <HorizontalStackLayout 
+            Spacing="20"
+            HorizontalOptions="Center"
+            Padding="0,0,0,20">
+            <Button 
+                Text="Refresh Database" 
+                WidthRequest="200" 
+                BackgroundColor="DarkRed"
+                TextColor="White"
+                Clicked="RefreshDatabase_Clicked"/>
+        </HorizontalStackLayout>
     </VerticalStackLayout>
-
 </ContentPage>
+

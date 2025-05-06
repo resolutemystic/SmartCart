@@ -1,6 +1,12 @@
 ﻿using CommunityToolkit.Maui.Views;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System;
+using System.Linq;
+using Microsoft.Maui.Controls;
+
+#if ANDROID
+using static Android.App.LauncherActivity;
+#endif
+
 
 namespace SmartCart
 {
@@ -19,34 +25,31 @@ namespace SmartCart
             UpdateList();
         }
 
-        public List<GroceryItem> List
-        {
-            get { return GroceryList.GetLatestList(); }
-        }
+        public List<GroceryItem> List => GroceryList.GetLatestList();
 
         private void NewItemBtnClicked(object sender, EventArgs e)
         {
             Shell.Current.GoToAsync(nameof(CategorySelectionPage));
         }
 
-        public void UpdateList()
+        private void UpdateList()
         {
-            isLoading = true;
-            Database.PullList();
-            listItems.ItemsSource = GroceryList.GetLatestList();
-            isLoading = false;
+            Database.PullList(); // This repopulates GroceryList.currentList
+            listItems.ItemsSource = null; // Clear previous binding
+            listItems.ItemsSource = GroceryList.currentList; // Rebind updated list
         }
 
-        private void CheckBox_CheckedChanged(System.Object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
+
+        private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             var checkbox = (CheckBox)sender;
             var item = (GroceryItem)checkbox.BindingContext;
-            bool currentState;
-            if(item != null)
-            {
-                currentState = Database.GetCheckState(item.EntryID);
 
-                if(!isLoading && currentState != item.IsChecked)
+            if (item != null)
+            {
+                bool currentState = Database.GetCheckState(item.EntryID);
+
+                if (!isLoading && currentState != item.IsChecked)
                 {
                     Database.UpdateCheck(item.EntryID);
                 }
@@ -68,11 +71,8 @@ namespace SmartCart
             if (answer)
             {
                 Database.DeleteCheckedItems();
-                UpdateList(); 
+                UpdateList();
                 DeleteSelectedButton.IsVisible = false;
-            } else
-            {
-                return;
             }
         }
 
@@ -95,7 +95,7 @@ namespace SmartCart
             var picker = (Picker)sender;
             var item = (GroceryItem)picker.BindingContext;
 
-            if(item != null && (int)picker.SelectedItem != item.Quantity)
+            if (item != null && (int)picker.SelectedItem != item.Quantity)
             {
                 bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
                 if (yes)
@@ -129,6 +129,18 @@ namespace SmartCart
                 }
             }
         }
-    }
 
+        private async void RefreshDatabase_Clicked(object sender, EventArgs e)
+        {
+            bool confirmed = await DisplayAlert("Confirm", "Are you sure you want to delete and recreate the database?", "Yes", "No");
+
+            if (confirmed)
+            {
+                Database.RefreshDatabase();
+                UpdateList(); // <- force UI refresh after database reset
+            }
+        }
+    }
 }
+
+
