@@ -1,46 +1,54 @@
+
 using Microsoft.Maui.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace SmartCart;
 
-
-    public partial class CategorySelectionPage : ContentPage
+namespace SmartCart
 {
-    
-    public List<string> CategoryList { get; set; }
-
-    public CategorySelectionPage()
+    public partial class CategorySelectionPage : ContentPage
     {
-        InitializeComponent();
+        public List<string> CategoryList { get; set; }
 
-        
-        CategoryList = Database.categoryDict.Keys.ToList();
-
-        
-        BindingContext = this;
-    }
-
-    private void OnCategoryChanged(object sender, EventArgs e)
-    {
-        string selectedCategory = CategoryPicker.SelectedItem?.ToString();
-
-        if (!string.IsNullOrWhiteSpace(selectedCategory) &&
-            Database.categoryDict.ContainsKey(selectedCategory))
+        public CategorySelectionPage()
         {
-            int categoryID = Database.categoryDict[selectedCategory];
+            InitializeComponent();
 
-            // This updates the item list bound to AddItem
-            Database.UpdateCategorizedItems(categoryID);
 
-            // Navigate to AddItem page
-            Shell.Current.GoToAsync(nameof(AddItem));
+            CategoryList = Database.categoryDict.Keys.ToList();
+
+
+            BindingContext = this;
+        }
+
+
+        private void CategoryFrame_Tapped(object sender, TappedEventArgs e)
+        {
+            var selectedCategory = e.Parameter as string;
+            OnCategoryTapped(selectedCategory);
+        }
+
+
+        private async void OnCategoryTapped(string selectedCategory)
+        {
+            if (!string.IsNullOrWhiteSpace(selectedCategory) &&
+                Database.categoryDict.ContainsKey(selectedCategory))
+            {
+                int categoryID = Database.categoryDict[selectedCategory];
+
+
+                Database.UpdateCategorizedItems(categoryID);
+
+
+                await Shell.Current.GoToAsync(nameof(AddItem));
+            }
+        }
+
+
+        private async void OnBrowseAllItemsClicked(object sender, EventArgs e)
+        {
+            Database.UpdateCategorizedItems(0); // 0 = no filter
+            await Shell.Current.GoToAsync(nameof(AddItem));
         }
     }
-
-    private async void OnBrowseAllItemsClicked(object sender, EventArgs e)
-    {
-        Database.UpdateCategorizedItems(0); // resets to unfiltered
-        await Shell.Current.GoToAsync(nameof(AddItem));
-    }
-
 }
