@@ -134,7 +134,7 @@ namespace SmartCart
                     Database.UpdatePriority(item.EntryID, Database.priorityDict[selectedPriority]);
                     item.Priority = selectedPriority;
                 }
-                else
+                else 
                 {
                     picker.SelectedItem = item.Priority;
                 }
