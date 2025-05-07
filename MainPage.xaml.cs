@@ -32,9 +32,19 @@ namespace SmartCart
         public void UpdateList()
         {
             isLoading = true;
-            Database.PullList();
-            listItems.ItemsSource = GroceryList.GetLatestList();
-            isLoading = false;
+            try
+            {
+                Database.PullList();
+                listItems.ItemsSource = GroceryList.GetLatestList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error pulling list: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
+            }
         }
 
         private void CheckBox_CheckedChanged(System.Object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
@@ -42,11 +52,11 @@ namespace SmartCart
             var checkbox = (CheckBox)sender;
             var item = (GroceryItem)checkbox.BindingContext;
             bool currentState;
-            if(item != null)
+            if (item != null)
             {
                 currentState = Database.GetCheckState(item.EntryID);
 
-                if(!isLoading && currentState != item.IsChecked)
+                if (!isLoading && currentState != item.IsChecked)
                 {
                     Database.UpdateCheck(item.EntryID);
                 }
@@ -68,9 +78,10 @@ namespace SmartCart
             if (answer)
             {
                 Database.DeleteCheckedItems();
-                UpdateList(); 
+                UpdateList();
                 DeleteSelectedButton.IsVisible = false;
-            } else
+            }
+            else
             {
                 return;
             }
@@ -95,13 +106,13 @@ namespace SmartCart
             var picker = (Picker)sender;
             var item = (GroceryItem)picker.BindingContext;
 
-            if(item != null && (int)picker.SelectedItem != item.Quantity)
+            if (item != null && picker.SelectedItem is int selectedQuantity && selectedQuantity != item.Quantity)
             {
-                bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
+                bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {selectedQuantity}?", "Yes", "Cancel");
                 if (yes)
                 {
-                    Database.UpdateQuantity(item.EntryID, (int)picker.SelectedItem);
-                    item.Quantity = (int)picker.SelectedItem;
+                    Database.UpdateQuantity(item.EntryID, selectedQuantity);
+                    item.Quantity = selectedQuantity;
                 }
                 else
                 {
@@ -115,20 +126,19 @@ namespace SmartCart
             var picker = (Picker)sender;
             var item = (GroceryItem)picker.BindingContext;
 
-            if (item != null && (string)picker.SelectedItem != item.Priority)
+            if (item != null && picker.SelectedItem is string selectedPriority && selectedPriority != item.Priority)
             {
-                bool yes = await DisplayAlert("Are you sure?", $"Change the priority of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
+                bool yes = await DisplayAlert("Are you sure?", $"Change the priority of {item.Name} to {selectedPriority}?", "Yes", "Cancel");
                 if (yes)
                 {
-                    Database.UpdatePriority(item.EntryID, Database.priorityDict[(string)picker.SelectedItem]);
-                    item.Priority = (string)picker.SelectedItem;
+                    Database.UpdatePriority(item.EntryID, Database.priorityDict[selectedPriority]);
+                    item.Priority = selectedPriority;
                 }
-                else
+                else 
                 {
                     picker.SelectedItem = item.Priority;
                 }
             }
         }
     }
-
 }

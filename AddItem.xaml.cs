@@ -1,75 +1,67 @@
 using CommunityToolkit.Maui.Views;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Microsoft.Maui.Controls; // Required for SelectionChangedEventArgs and ContentPage
 
 namespace SmartCart;
 
 public partial class AddItem : ContentPage
 {
-	public AddItem()
-	{
-		InitializeComponent();
+    private string selectedItemName;
 
+    public AddItem()
+    {
+        InitializeComponent();
+
+        // Set the item sources for your pickers and collection
         PriorityPicker.ItemsSource = Priorities;
-        ItemNamePicker.ItemsSource = Items;
-	}
+        QuantityPicker.ItemsSource = Quantities;
+        ItemCollectionView.ItemsSource = Items;
+    }
 
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    // Assuming your item list is a list of strings
+    public List<string> Items => new(Database.categorizedItemDict.Keys);
+
+    public List<string> Priorities => new(Database.priorityDict.Keys);
+
+    public List<int> Quantities => Enumerable.Range(1, 50).ToList(); // 1–50 quantity range
+
+    private void ItemCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // If the text field is empty or null then leave.
-        string regex = e.NewTextValue;
-        if (String.IsNullOrEmpty(regex))
+        if (e.CurrentSelection.Count > 0)
+        {
+            selectedItemName = e.CurrentSelection[0] as string;
+        }
+        else
+        {
+            selectedItemName = null;
+        }
+    }
+
+    private async void OnAddItemClicked(object sender, EventArgs e)
+    {
+        // Safely retrieve selected values
+        string name = selectedItemName;
+        string priority = PriorityPicker.SelectedItem as string;
+        var quantityItem = QuantityPicker.SelectedItem;
+
+        // Validation
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(priority) || quantityItem == null)
+        {
+            await DisplayAlert("Missing Info", "Please select an item, quantity, and priority.", "OK");
             return;
-
-        // If the text field only contains numbers then leave.
-        if (!Regex.Match(regex, "^[0-9]+$").Success)
-        {
-            // This returns to the previous valid state.
-            var entry = sender as Entry;
-            entry.Text = (string.IsNullOrEmpty(e.OldTextValue)) ?
-                    string.Empty : e.OldTextValue;
         }
 
+        int quantity = (int)quantityItem;
 
-    }
-
-    public List<string> Items
-    {
-        get { return new List<string>(Database.categorizedItemDict.Keys); }
-    }
-
-    public List<string> Priorities
-    {
-        get { return new List<string>(Database.priorityDict.Keys); }
-    }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        string name = (string)ItemNamePicker.SelectedItem;
-        string priority = (string)PriorityPicker.SelectedItem;
-
-        int itemID = 1;
-        if(ItemNamePicker.SelectedItem != null)
-        {
-            itemID = Database.groceryItemDict[name];
-        }
-
-        int priorityID = 1;
-        if(PriorityPicker.SelectedItem != null)
-        {
-            priorityID = Database.priorityDict[priority];
-        }
-
-        int quantity = 1;
-        if(QuantityEntry.Text != null)
-        {
-            quantity = Convert.ToInt32(QuantityEntry.Text);
-        }
-
+        int itemID = Database.groceryItemDict[name];
+        int priorityID = Database.priorityDict[priority];
         int existing = Database.ExistingListItem(itemID);
+
         if (existing > 0)
         {
-            if (await DisplayAlert("Already Exists", $"{name} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
+            bool increase = await DisplayAlert("Already Exists", $"{name} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel");
+            if (increase)
             {
                 Database.IncreaseQuantity(existing, quantity);
             }
@@ -80,14 +72,10 @@ public partial class AddItem : ContentPage
         }
 
         await Shell.Current.GoToAsync("///MainPage");
-
-
     }
-    private async void OnSelectFromCategoryClicked(object sender, EventArgs e)
+
+    private async void OnGoBackClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(CategorySelectionPage));
+        await Shell.Current.GoToAsync("///MainPage");
     }
-   
-    
 }
-

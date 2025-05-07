@@ -2,36 +2,60 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartCart.AddItem"
-             Title="Add Grocery Item">
+             Title="Add Grocery Item"
+             BackgroundColor="White">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label Text="Item Name" />
-            <Picker x:Name="ItemNamePicker" Title="Select Item"/>
+            <Label Text="Add Grocery Items"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
 
-            <Label Text="Quantity" />
-            <Entry x:Name="QuantityEntry" Keyboard="Numeric" Placeholder="e.g. 1" TextChanged="Entry_TextChanged" />
+            <!-- CollectionView to display grocery items -->
+            <CollectionView x:Name="ItemCollectionView"
+                            HeightRequest="200"
+                            SelectionMode="Single"
+                            SelectionChanged="ItemCollectionView_SelectionChanged">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Gray" Padding="10" Margin="5" BackgroundColor="White">
+                            <Label Text="{Binding ItemName}" FontSize="16" TextColor="Black" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <Label Text="Priority" />
-            <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+            <!-- Quantity and Priority Pickers -->
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <VerticalStackLayout>
+                    <Label Text="Quantity" FontSize="14"/>
+                    <Picker x:Name="QuantityPicker" Title="Select Quantity"/>
+                </VerticalStackLayout>
 
-            <HorizontalStackLayout 
-             HorizontalOptions="Center"
-                Spacing="20"
-            Margin="0,20,0,20">
+                <VerticalStackLayout>
+                    <Label Text="Priority" FontSize="14"/>
+                    <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
 
-             
-
-                <Button  
-            Text="Add Item" 
-            Clicked="Button_Clicked"
-            WidthRequest="150"
-            BackgroundColor="MediumSlateBlue"
-            TextColor="White"
-            CornerRadius="10"
-            Padding="12,6"/>
-
+            <!-- Buttons -->
+            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center" Margin="0,20,0,0">
+                <Button Text="Go Back"
+                        Clicked="OnGoBackClicked"
+                        WidthRequest="100"
+                        BackgroundColor="LightGray"
+                        CornerRadius="8"/>
+                <Button Text="Add Item"
+                        Clicked="OnAddItemClicked"
+                        WidthRequest="100"
+                        BackgroundColor="MediumSlateBlue"
+                        TextColor="White"
+                        CornerRadius="8"/>
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
