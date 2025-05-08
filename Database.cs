@@ -374,43 +374,5 @@ namespace SmartCart
             return entryID;
         }
 
-        public static void PullQuantitySortedList(bool desc)
-        {
-            string orderBy = "ASC";
-            if (desc) { orderBy = "DESC"; }
-
-            SqliteConnection connection = new SqliteConnection(connectionString);
-            var cmd = connection.CreateCommand();
-            connection.Open();
-            cmd.CommandText = $@"
-                                SELECT entryID, name, quantity, priority, isChecked
-                                FROM GroceryList
-                                INNER JOIN GroceryItems on GroceryList.itemID = GroceryItems.itemID
-                                ORDER BY quantity {orderBy}
-                               ";
-            GroceryList.currentList = GroceryList.BuildList(cmd.ExecuteReader());
-            connection.Close();
-            cmd.Dispose();
-        }
-
-        public static void PullPrioritySortedList(bool desc)
-        {
-            string orderBy = "ASC";
-            if (desc) { orderBy = "DESC"; }
-
-            SqliteConnection connection = new SqliteConnection(connectionString);
-            var cmd = connection.CreateCommand();
-            connection.Open();
-            cmd.CommandText = $@"
-                                SELECT entryID, name, quantity, priority, isChecked
-                                FROM GroceryList
-                                INNER JOIN GroceryItems on GroceryList.itemID = GroceryItems.itemID
-                                ORDER BY priority {orderBy}
-                               ";
-            GroceryList.currentList = GroceryList.BuildList(cmd.ExecuteReader());
-            connection.Close();
-            cmd.Dispose();
-        }
-
     }
 }
