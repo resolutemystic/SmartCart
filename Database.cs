@@ -374,5 +374,20 @@ namespace SmartCart
             return entryID;
         }
 
+        public static void DeleteAllItems()
+        {
+            SqliteConnection connection = new SqliteConnection(connectionString);
+            var cmd = connection.CreateCommand();
+            connection.Open();
+            cmd.CommandText = @"
+                                BEGIN TRANSACTION;
+                                DELETE FROM GroceryList;
+                                COMMIT;
+                                ";
+            cmd.ExecuteNonQuery();
+            connection.Close();
+            cmd.Dispose();
+        }
+
     }
 }
