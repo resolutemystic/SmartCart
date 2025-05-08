@@ -29,9 +29,9 @@
                 <ColumnDefinition Width="45" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Name" Grid.Column="1" Style="{StaticResource HeaderLabelStyle}" />
-            <Label Text="Qty" Grid.Column="2" Style="{StaticResource HeaderLabelStyle}" />
-            <Label Text="Priority" Grid.Column="3" Style="{StaticResource HeaderLabelStyle}" />
+            <Label Text="Name" Grid.Column="1" HorizontalOptions="CenterAndExpand" />
+            <Button Text="Quantity" Grid.Column="2" HorizontalOptions="StartAndExpand" Clicked="Quantity_Clicked" FontSize="12" />
+            <Button Text="Priority" Grid.Column="3" HorizontalOptions="StartAndExpand" Clicked="Priority_Clicked" FontSize="12" />
         </Grid>
 
         <!-- CollectionView for Items -->
@@ -62,6 +62,7 @@
                                     SelectedItem="{Binding Quantity, Mode=OneWay}"
                                     SelectedIndexChanged="QuantityPicker_SelectedIndexChanged"
                                     VerticalOptions="Center"
+                                    HorizontalOptions="CenterAndExpand"
                                     HorizontalTextAlignment="Center"
                                     VerticalTextAlignment="Center" />
 
@@ -70,6 +71,7 @@
                                     SelectedItem="{Binding Priority, Mode=OneWay}"
                                     SelectedIndexChanged="PriorityPicker_SelectedIndexChanged"
                                     HorizontalTextAlignment="Center"
+                                    HorizontalOptions="CenterAndExpand"
                                     VerticalTextAlignment="Center"
                                     VerticalOptions="Center" />
 
