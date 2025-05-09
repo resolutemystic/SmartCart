@@ -7,8 +7,6 @@ namespace SmartCart
     public partial class MainPage : ContentPage
     {
         bool isLoading = false;
-        bool quantityClicked = false;
-        bool priorityClicked = false;
 
         public MainPage()
         {
@@ -44,11 +42,11 @@ namespace SmartCart
             var checkbox = (CheckBox)sender;
             var item = (GroceryItem)checkbox.BindingContext;
             bool currentState;
-            if(item != null)
+            if (item != null)
             {
                 currentState = Database.GetCheckState(item.EntryID);
 
-                if(!isLoading && currentState != item.IsChecked)
+                if (!isLoading && currentState != item.IsChecked)
                 {
                     Database.UpdateCheck(item.EntryID);
                 }
@@ -70,9 +68,10 @@ namespace SmartCart
             if (answer)
             {
                 Database.DeleteCheckedItems();
-                UpdateList(); 
+                UpdateList();
                 DeleteSelectedButton.IsVisible = false;
-            } else
+            }
+            else
             {
                 return;
             }
@@ -97,7 +96,7 @@ namespace SmartCart
             var picker = (Picker)sender;
             var item = (GroceryItem)picker.BindingContext;
 
-            if(item != null && (int)picker.SelectedItem != item.Quantity)
+            if (item != null && (int)picker.SelectedItem != item.Quantity)
             {
                 bool yes = await DisplayAlert("Are you sure?", $"Change the quantity of {item.Name} to {picker.SelectedItem}?", "Yes", "Cancel");
                 if (yes)
@@ -132,23 +131,15 @@ namespace SmartCart
             }
         }
 
-        private void Priority_Clicked(object sender, EventArgs e)
+        private async void ClearAll_Clicked(object sender, EventArgs e)
         {
-            isLoading = true;
-            Database.PullPrioritySortedList(priorityClicked);
-            listItems.ItemsSource = GroceryList.GetLatestList();
-            isLoading = false;
-            priorityClicked = !priorityClicked;
-        }
-
-        private void Quantity_Clicked(object sender, EventArgs e)
-        {
-            isLoading = true;
-            Database.PullQuantitySortedList(quantityClicked);
-            listItems.ItemsSource = GroceryList.GetLatestList();
-            isLoading = false;
-            quantityClicked = !quantityClicked;
+            bool answer = await DisplayAlert("Clear All Items", "Are you sure you want to delete all items from your grocery list?", "Yes", "No");
+            if (answer)
+            {
+                Database.DeleteAllItems();
+                UpdateList();
+                DeleteSelectedButton.IsVisible = false;
+            }
         }
     }
-
 }
