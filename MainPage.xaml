@@ -97,9 +97,18 @@
                     Clicked="NewItemBtnClicked"
                     Style="{StaticResource PrimaryButtonStyle}" />
 
+            <Button x:Name="DeleteAllButton"
+                    Text="Delete All"
+                    WidthRequest="120"
+                    Clicked="DeleteAll_Clicked"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="10,5" />
+
             <Button x:Name="DeleteSelectedButton"
                     Text="Delete Selected"
-                    WidthRequest="150"
+                    WidthRequest="120"
                     Clicked="DeleteSelected_Clicked"
                     IsVisible="False"
                     BackgroundColor="Red"

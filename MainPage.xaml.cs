@@ -129,6 +129,20 @@ namespace SmartCart
                 }
             }
         }
+
+        private async void DeleteAll_Clicked(object sender, EventArgs e)
+        {
+            bool answer = await DisplayAlert("Confirm Deletion", "Would you like to delete all items from the list?", "Yes", "No");
+            if (answer)
+            {
+                Database.DeleteAllItems();
+                UpdateList();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 
 }
