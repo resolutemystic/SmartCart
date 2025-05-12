@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="45" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Name" Grid.Column="1" HorizontalOptions="CenterAndExpand" />
+            <Label Text="Name" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
             <Button Text="Quantity" Grid.Column="2" HorizontalOptions="StartAndExpand" Clicked="Quantity_Clicked" FontSize="12" />
             <Button Text="Priority" Grid.Column="3" HorizontalOptions="StartAndExpand" Clicked="Priority_Clicked" FontSize="12" />
         </Grid>
