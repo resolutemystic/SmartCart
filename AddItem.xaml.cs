@@ -11,7 +11,7 @@ public partial class AddItem : ContentPage
 		InitializeComponent();
 
         PriorityPicker.ItemsSource = Priorities;
-        QuantityPicker.SelectedIndex = 0;
+        PriorityPicker.SelectedIndex = 0;
         QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList<int>();
         QuantityPicker.SelectedIndex = 0;
         ItemNameList.ItemsSource = Items;
