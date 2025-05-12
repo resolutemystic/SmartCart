@@ -11,31 +11,15 @@ public partial class AddItem : ContentPage
 		InitializeComponent();
 
         PriorityPicker.ItemsSource = Priorities;
-        ItemNamePicker.ItemsSource = Items;
+        QuantityPicker.SelectedIndex = 0;
+        QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList<int>();
+        QuantityPicker.SelectedIndex = 0;
+        ItemNameList.ItemsSource = Items;
 	}
 
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    public Dictionary<string, int> Items
     {
-        // If the text field is empty or null then leave.
-        string regex = e.NewTextValue;
-        if (String.IsNullOrEmpty(regex))
-            return;
-
-        // If the text field only contains numbers then leave.
-        if (!Regex.Match(regex, "^[0-9]+$").Success)
-        {
-            // This returns to the previous valid state.
-            var entry = sender as Entry;
-            entry.Text = (string.IsNullOrEmpty(e.OldTextValue)) ?
-                    string.Empty : e.OldTextValue;
-        }
-
-
-    }
-
-    public List<string> Items
-    {
-        get { return new List<string>(Database.categorizedItemDict.Keys); }
+        get { return Database.categorizedItemDict; }
     }
 
     public List<string> Priorities
@@ -45,13 +29,13 @@ public partial class AddItem : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        string name = (string)ItemNamePicker.SelectedItem;
+        KeyValuePair<string, int> item = (KeyValuePair<string, int>)ItemNameList.SelectedItem;
         string priority = (string)PriorityPicker.SelectedItem;
 
         int itemID = 1;
-        if(ItemNamePicker.SelectedItem != null)
+        if(ItemNameList.SelectedItem != null)
         {
-            itemID = Database.groceryItemDict[name];
+            itemID = item.Value;
         }
 
         int priorityID = 1;
@@ -61,15 +45,15 @@ public partial class AddItem : ContentPage
         }
 
         int quantity = 1;
-        if(QuantityEntry.Text != null)
+        if(QuantityPicker.SelectedItem != null)
         {
-            quantity = Convert.ToInt32(QuantityEntry.Text);
+            quantity = (int)QuantityPicker.SelectedItem;
         }
 
         int existing = Database.ExistingListItem(itemID);
         if (existing > 0)
         {
-            if (await DisplayAlert("Already Exists", $"{name} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
+            if (await DisplayAlert("Already Exists", $"{item.Key} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
             {
                 Database.IncreaseQuantity(existing, quantity);
             }

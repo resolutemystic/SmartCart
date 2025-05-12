@@ -7,30 +7,40 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label Text="Item Name" />
-            <Picker x:Name="ItemNamePicker" Title="Select Item"/>
+            <ListView x:Name="ItemNameList">
+                <ListView.Header>
+                    <Grid Padding="0,0,0,20">
+                        <Label Text="Grocery Items" FontSize="24" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label Text="{Binding Key}" FontSize="16" HorizontalTextAlignment="Center"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-            <Label Text="Quantity" />
-            <Entry x:Name="QuantityEntry" Keyboard="Numeric" Placeholder="e.g. 1" TextChanged="Entry_TextChanged" />
-
-            <Label Text="Priority" />
-            <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="30">
+                <Picker x:Name="QuantityPicker" Title="Select Quantity"/>
+                <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+            </HorizontalStackLayout>
 
             <HorizontalStackLayout 
-             HorizontalOptions="Center"
-                Spacing="20"
+            HorizontalOptions="Center"
+            Spacing="20"
             Margin="0,20,0,20">
 
-             
 
                 <Button  
-            Text="Add Item" 
-            Clicked="Button_Clicked"
-            WidthRequest="150"
-            BackgroundColor="MediumSlateBlue"
-            TextColor="White"
-            CornerRadius="10"
-            Padding="12,6"/>
+                Text="Add Item" 
+                Clicked="Button_Clicked"
+                WidthRequest="150"
+                BackgroundColor="MediumSlateBlue"
+                TextColor="White"
+                CornerRadius="10"
+                Padding="12,6"/>
 
             </HorizontalStackLayout>
 
