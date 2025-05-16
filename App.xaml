@@ -34,6 +34,14 @@
                 </SolidColorBrush.Color>
             </SolidColorBrush>
 
+            <SolidColorBrush x:Key="SelectedBorderBrush" Color="{AppThemeBinding Light=MediumSlateBlue, Dark=RoyalBlue}" />
+            <SolidColorBrush x:Key="UnselectedBorderBrush" Color="{AppThemeBinding Light=#F9F9F9, Dark=Black}" />
+
+            <local:BoolToColorConverter x:Key="BoolToColorConverter"
+                                        SelectedColorResourceKey="SelectedBorderBrush"
+                                        UnselectedColorResourceKey="UnselectedBorderBrush"/>
+
+
             <!-- Styles using brushes -->
             <Style x:Key="PrimaryLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="14" />
