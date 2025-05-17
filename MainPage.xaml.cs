@@ -7,6 +7,8 @@ namespace SmartCart
     public partial class MainPage : ContentPage
     {
         bool isLoading = false;
+        bool quantityClicked = false;
+        bool priorityClicked = false;
 
         public MainPage()
         {
@@ -127,6 +129,38 @@ namespace SmartCart
                 {
                     picker.SelectedItem = item.Priority;
                 }
+            }
+        }
+
+        private void Priority_Clicked(object sender, EventArgs e)
+        {
+            isLoading = true;
+            Database.PullPrioritySortedList(priorityClicked);
+            listItems.ItemsSource = GroceryList.GetLatestList();
+            isLoading = false;
+            priorityClicked = !priorityClicked;
+        }
+
+        private void Quantity_Clicked(object sender, EventArgs e)
+        {
+            isLoading = true;
+            Database.PullQuantitySortedList(quantityClicked);
+            listItems.ItemsSource = GroceryList.GetLatestList();
+            isLoading = false;
+            quantityClicked = !quantityClicked;
+        }
+
+        private async void DeleteAll_Clicked(object sender, EventArgs e)
+        {
+            bool answer = await DisplayAlert("Confirm Deletion", "Would you like to delete all items from the list?", "Yes", "No");
+            if (answer)
+            {
+                Database.DeleteAllItems();
+                UpdateList();
+            }
+            else
+            {
+                return;
             }
         }
     }
