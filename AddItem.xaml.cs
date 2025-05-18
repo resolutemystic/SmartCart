@@ -1,62 +1,88 @@
 using CommunityToolkit.Maui.Views;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace SmartCart;
 
 public partial class AddItem : ContentPage
 {
-	public AddItem()
-	{
-		InitializeComponent();
-
-        PriorityPicker.ItemsSource = Priorities;
-        PriorityPicker.SelectedIndex = 0;
-        QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList<int>();
-        QuantityPicker.SelectedIndex = 0;
-        ItemNameList.ItemsSource = Items;
-	}
-
-    public Dictionary<string, int> Items
+    public class SelectableItem : INotifyPropertyChanged
     {
-        get { return Database.categorizedItemDict; }
+        public string Key { get; set; }
+        public int Value { get; set; }
+
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                if (isSelected != value)
+                {
+                    isSelected = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public List<SelectableItem> SelectableItems { get; set; }
+    private SelectableItem selectedItem;
+
+    public AddItem()
+    {
+        InitializeComponent();
+
+        SelectableItems = Database.categorizedItemDict
+       .Select(kvp => new SelectableItem { Key = kvp.Key, Value = kvp.Value })
+       .ToList();
+
+        QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList();
+        QuantityPicker.SelectedIndex = 0;
+
+        PriorityPicker.ItemsSource = new List<string> { "Low", "Medium", "High" };
+        PriorityPicker.SelectedIndex = 0;
+        BindingContext = this;
+        ItemCollectionView.ItemsSource = SelectableItems;
+
     }
 
-    public List<string> Priorities
+    private void OnItemTapped(object sender, TappedEventArgs e)
     {
-        get { return new List<string>(Database.priorityDict.Keys); }
+        var tappedItem = (SelectableItem)e.Parameter;
+
+        foreach (var item in SelectableItems)
+            item.IsSelected = false;
+
+        tappedItem.IsSelected = true;
+        selectedItem = tappedItem;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        KeyValuePair<string, int> item = (KeyValuePair<string, int>)ItemNameList.SelectedItem;
+        if (selectedItem == null)
+        {
+            await DisplayAlert("No item selected", "Please select an item to add.", "OK");
+            return;
+        }
+
         string priority = (string)PriorityPicker.SelectedItem;
+        int quantity = (int)QuantityPicker.SelectedItem;
 
-        int itemID = 1;
-        if(ItemNameList.SelectedItem != null)
-        {
-            itemID = item.Value;
-        }
-
-        int priorityID = 1;
-        if(PriorityPicker.SelectedItem != null)
-        {
-            priorityID = Database.priorityDict[priority];
-        }
-
-        int quantity = 1;
-        if(QuantityPicker.SelectedItem != null)
-        {
-            quantity = (int)QuantityPicker.SelectedItem;
-        }
+        int itemID = selectedItem.Value;
+        int priorityID = Database.priorityDict[priority];
 
         int existing = Database.ExistingListItem(itemID);
         if (existing > 0)
         {
-            if (await DisplayAlert("Already Exists", $"{item.Key} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
-            {
+            if (await DisplayAlert("Already Exists", $"{selectedItem.Key} is already in your list. Increase quantity by {quantity}?", "Yes", "Cancel"))
                 Database.IncreaseQuantity(existing, quantity);
-            }
         }
         else
         {
@@ -64,14 +90,11 @@ public partial class AddItem : ContentPage
         }
 
         await Shell.Current.GoToAsync("///MainPage");
-
-
     }
+
     private async void OnSelectFromCategoryClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(CategorySelectionPage));
     }
-   
-    
 }
 
