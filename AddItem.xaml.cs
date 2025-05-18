@@ -43,7 +43,7 @@ public partial class AddItem : ContentPage
        .Select(kvp => new SelectableItem { Key = kvp.Key, Value = kvp.Value })
        .ToList();
 
-        QuantityPicker.ItemsSource = Enumerable.Range(1, 10).ToList();
+        QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList();
         QuantityPicker.SelectedIndex = 0;
 
         PriorityPicker.ItemsSource = new List<string> { "Low", "Medium", "High" };
