@@ -1,66 +1,122 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
-             x:Class="SmartCart.MainPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Name="GroceryListPage"
-             BindingContext="{x:Reference GroceryListPage}">
-    <VerticalStackLayout>
-        <Grid Padding="10">
+    x:Class="SmartCart.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="GroceryListPage"
+    Title="SmartCart"
+    BindingContext="{x:Reference GroceryListPage}"
+    Background="{DynamicResource PageBackgroundBrush}">
+
+    <VerticalStackLayout Padding="10" Spacing="10">
+
+        <Label Text="Grocery List"
+               HorizontalOptions="Center"
+               FontSize="24"
+               FontAttributes="Bold"
+               Style="{StaticResource PrimaryLabelStyle}" />
+
+        <!-- Header Row -->
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="45" />
             </Grid.ColumnDefinitions>
-            <Label Text="Name" Grid.Column="0" FontAttributes="Bold" FontSize="16"/>
-            <Label Text="  #" Grid.Column="1" FontAttributes="Bold" FontSize="16" />
-            <Label Text="    !" Grid.Column="2" FontAttributes="Bold" FontSize="16"/>
+
+            <Label Text="Name" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+            <Button Text="Quantity" Grid.Column="2" HorizontalOptions="StartAndExpand" Clicked="Quantity_Clicked" FontSize="11" />
+            <Button Text="Priority" Grid.Column="3" HorizontalOptions="StartAndExpand" Clicked="Priority_Clicked" FontSize="11" />
         </Grid>
-        <ListView x:Name="listItems">
-            <ListView.ItemTemplate>
+
+        <!-- CollectionView for Items -->
+        <CollectionView x:Name="listItems"
+                        ItemsSource="{Binding listItems}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <Grid Padding="10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="40"/>
-                            </Grid.RowDefinitions>
+                    <Frame Style="{StaticResource ItemCardStyle}" Margin="0,5">
+                        <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="80" />
                                 <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="60" />
                                 <ColumnDefinition Width="45" />
                             </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Name}" Grid.Column="0" VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding QuantityOptions}" SelectedItem="{Binding Quantity, Mode=OneWay}" SelectedIndexChanged="QuantityPicker_SelectedIndexChanged" Grid.Column="1" VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding PriorityOptions}" SelectedItem="{Binding Priority, Mode=OneWay}" SelectedIndexChanged="PriorityPicker_SelectedIndexChanged" Grid.Column="2" VerticalOptions="Center"/>
-                            <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" CheckedChanged="CheckBox_CheckedChanged"/>
-                            <ImageButton Source="trash.png" Grid.Column="4" Clicked="DeleteButton_Clicked" Aspect="Center"/>
+
+                            <CheckBox IsChecked="{Binding IsChecked}"
+                                Grid.Column="0"
+                                CheckedChanged="CheckBox_CheckedChanged"
+                                VerticalOptions="Center" />
+
+                            <Label Text="{Binding Name}" Grid.Column="1" VerticalOptions="Center" Style="{StaticResource PrimaryLabelStyle}" />
+
+                            <Picker Grid.Column="2"
+                                    ItemsSource="{Binding QuantityOptions}"
+                                    SelectedItem="{Binding Quantity, Mode=OneWay}"
+                                    SelectedIndexChanged="QuantityPicker_SelectedIndexChanged"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="CenterAndExpand"
+                                    HorizontalTextAlignment="Center"
+                                    VerticalTextAlignment="Center" />
+
+                            <Picker Grid.Column="3"
+                                    ItemsSource="{Binding PriorityOptions}"
+                                    SelectedItem="{Binding Priority, Mode=OneWay}"
+                                    SelectedIndexChanged="PriorityPicker_SelectedIndexChanged"
+                                    HorizontalTextAlignment="Center"
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalTextAlignment="Center"
+                                    VerticalOptions="Center" />
+
+                            <ImageButton Source="{AppThemeBinding Light='trash_light.svg', Dark='trash_dark.svg'}"
+                                         Grid.Column="4"
+                                         Clicked="DeleteButton_Clicked"
+                                         Aspect="Center"
+                                         BackgroundColor="Transparent"
+                                         HeightRequest="24"
+                                         WidthRequest="24" />
                         </Grid>
-                    </ViewCell>
+                    </Frame>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Bottom Buttons -->
         <HorizontalStackLayout 
-            Spacing="20"
-            HorizontalOptions="Center"
-            Padding="10"
-        >
-            <Button Text="New Item" WidthRequest="120" Clicked="NewItemBtnClicked"/>
-            <Button 
-                x:Name="DeleteSelectedButton"
-                Text="Delete Selected" 
-                WidthRequest="150" 
-                Clicked="DeleteSelected_Clicked"
-                IsVisible="False"
-                BackgroundColor="Red"
-                TextColor="White"
-            />
+            Spacing="10"
+            HorizontalOptions="Center">
+
+            <Button Text="New Item"
+                    WidthRequest="100"
+                    Clicked="NewItemBtnClicked"
+                    Style="{StaticResource PrimaryButtonStyle}" 
+                    FontSize="12" />
+
+            <Button x:Name="DeleteAllButton"
+                    Text="Delete All"
+                    WidthRequest="100"
+                    Clicked="DeleteAll_Clicked"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="8" 
+                    FontSize="12" />
+
+            <Button x:Name="DeleteSelectedButton"
+                    Text="Delete Selected"
+                    WidthRequest="100"
+                    Clicked="DeleteSelected_Clicked"
+                    IsVisible="False"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="8" 
+                    FontSize="12" />
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

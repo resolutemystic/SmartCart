@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SmartCart"
              x:Class="SmartCart.AddItem"
-             Title="Add Grocery Item">
+             Title="Add Grocery Item"
+             BackgroundColor="{DynamicResource PageBackgroundBrush}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label Text="Item Name" />
-            <Picker x:Name="ItemNamePicker" Title="Select Item"/>
+            <Label Text="Grocery Items"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Style="{StaticResource PrimaryLabelStyle}" />
 
-            <Label Text="Quantity" />
-            <Entry x:Name="QuantityEntry" Keyboard="Numeric" Placeholder="e.g. 1" TextChanged="Entry_TextChanged" />
+            <CollectionView x:Name="ItemCollectionView"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="5"
+                            Padding="10"
+                            BackgroundColor="{Binding IsSelected, Converter={StaticResource BoolToColorConverter}}"
+                            HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnItemTapped"
+                                    CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <Label Text="{Binding Key}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                FontSize="16"
+                                Style="{StaticResource PrimaryLabelStyle}" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <Label Text="Priority" />
-            <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="30">
+                <Picker x:Name="QuantityPicker" Title="Select Quantity"/>
+                <Picker x:Name="PriorityPicker" Title="Select Priority"/>
+            </HorizontalStackLayout>
 
-            <HorizontalStackLayout 
-             HorizontalOptions="Center"
-                Spacing="20"
-            Margin="0,20,0,20">
-
-             
-
-                <Button  
-            Text="Add Item" 
-            Clicked="Button_Clicked"
-            WidthRequest="150"
-            BackgroundColor="MediumSlateBlue"
-            TextColor="White"
-            CornerRadius="10"
-            Padding="12,6"/>
-
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,20">
+                <Button Text="Add Item"
+                        Clicked="Button_Clicked"
+                        WidthRequest="150"
+                        Style="{StaticResource PrimaryButtonStyle}" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>

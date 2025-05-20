@@ -1,78 +1,88 @@
 using CommunityToolkit.Maui.Views;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace SmartCart;
 
 public partial class AddItem : ContentPage
 {
-	public AddItem()
-	{
-		InitializeComponent();
-
-        PriorityPicker.ItemsSource = Priorities;
-        ItemNamePicker.ItemsSource = Items;
-	}
-
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    public class SelectableItem : INotifyPropertyChanged
     {
-        // If the text field is empty or null then leave.
-        string regex = e.NewTextValue;
-        if (String.IsNullOrEmpty(regex))
-            return;
+        public string Key { get; set; }
+        public int Value { get; set; }
 
-        // If the text field only contains numbers then leave.
-        if (!Regex.Match(regex, "^[0-9]+$").Success)
+        private bool isSelected;
+        public bool IsSelected
         {
-            // This returns to the previous valid state.
-            var entry = sender as Entry;
-            entry.Text = (string.IsNullOrEmpty(e.OldTextValue)) ?
-                    string.Empty : e.OldTextValue;
+            get => isSelected;
+            set
+            {
+                if (isSelected != value)
+                {
+                    isSelected = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public List<SelectableItem> SelectableItems { get; set; }
+    private SelectableItem selectedItem;
+
+    public AddItem()
+    {
+        InitializeComponent();
+
+        SelectableItems = Database.categorizedItemDict
+       .Select(kvp => new SelectableItem { Key = kvp.Key, Value = kvp.Value })
+       .ToList();
+
+        QuantityPicker.ItemsSource = Enumerable.Range(1, 99).ToList();
+        QuantityPicker.SelectedIndex = 0;
+
+        PriorityPicker.ItemsSource = new List<string> { "Low", "Medium", "High" };
+        PriorityPicker.SelectedIndex = 0;
+        BindingContext = this;
+        ItemCollectionView.ItemsSource = SelectableItems;
 
     }
 
-    public List<string> Items
+    private void OnItemTapped(object sender, TappedEventArgs e)
     {
-        get { return new List<string>(Database.categorizedItemDict.Keys); }
-    }
+        var tappedItem = (SelectableItem)e.Parameter;
 
-    public List<string> Priorities
-    {
-        get { return new List<string>(Database.priorityDict.Keys); }
+        foreach (var item in SelectableItems)
+            item.IsSelected = false;
+
+        tappedItem.IsSelected = true;
+        selectedItem = tappedItem;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        string name = (string)ItemNamePicker.SelectedItem;
+        if (selectedItem == null)
+        {
+            await DisplayAlert("No item selected", "Please select an item to add.", "OK");
+            return;
+        }
+
         string priority = (string)PriorityPicker.SelectedItem;
+        int quantity = (int)QuantityPicker.SelectedItem;
 
-        int itemID = 1;
-        if(ItemNamePicker.SelectedItem != null)
-        {
-            itemID = Database.groceryItemDict[name];
-        }
-
-        int priorityID = 1;
-        if(PriorityPicker.SelectedItem != null)
-        {
-            priorityID = Database.priorityDict[priority];
-        }
-
-        int quantity = 1;
-        if(QuantityEntry.Text != null)
-        {
-            quantity = Convert.ToInt32(QuantityEntry.Text);
-        }
+        int itemID = selectedItem.Value;
+        int priorityID = Database.priorityDict[priority];
 
         int existing = Database.ExistingListItem(itemID);
         if (existing > 0)
         {
-            if (await DisplayAlert("Already Exists", $"{name} is already in your list. Would you like to increase the quantity by {quantity}?", "Yes", "Cancel"))
-            {
+            if (await DisplayAlert("Already Exists", $"{selectedItem.Key} is already in your list. Increase quantity by {quantity}?", "Yes", "Cancel"))
                 Database.IncreaseQuantity(existing, quantity);
-            }
         }
         else
         {
@@ -80,14 +90,11 @@ public partial class AddItem : ContentPage
         }
 
         await Shell.Current.GoToAsync("///MainPage");
-
-
     }
+
     private async void OnSelectFromCategoryClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(CategorySelectionPage));
     }
-   
-    
 }
 
